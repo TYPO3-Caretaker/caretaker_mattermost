@@ -23,6 +23,13 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use GuzzleHttp\Client;
+use IchHabRecht\CaretakerMattermost\Mattermost\CaretakerMessage;
+use ThibaudDauce\Mattermost\Mattermost;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+include_once 'phar://' . __DIR__ . '/../../../Resources/Php/thibaud-dauce-mattermost-php.phar/vendor/autoload.php';
+
 class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretaker_NotificationBaseExitPoint
 {
     /**
@@ -33,11 +40,50 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
     public function addNotification($notification, $overrideConfig)
     {
         $config = $this->getConfig($overrideConfig);
+        if (empty($config['endpoint'])) {
+            return;
+        }
 
         /** @var tx_caretaker_TestNode $node */
         $node = $notification['node'];
 
-        /** @var tx_caretaker_TestResult $result */
-        $result = $notification['result'];
+        $channels = GeneralUtility::trimExplode(',', $config['channel'], true);
+        $channels = array_unique(array_merge($channels, $this->getChannelsFromNodes($node)));
+        if (empty($channels)) {
+            return;
+        }
+
+        foreach ($channels as $channel) {
+            $this->sendNotification(new CaretakerMessage($node, $notification['result'], $channel, $this->config['username'], $this->config['icon']));
+        }
+    }
+
+    /**
+     * @param tx_caretaker_AbstractNode $node
+     * @return array
+     */
+    private function getChannelsFromNodes(tx_caretaker_AbstractNode $node)
+    {
+        $channels = [];
+
+        if ($node instanceof tx_caretaker_InstanceNode || $node instanceof tx_caretaker_InstancegroupNode) {
+            $channels = GeneralUtility::trimExplode(',', $node->getProperty('tx_caretakermattermost_channel'), true);
+        }
+
+        if (!$node->getParent() instanceof tx_caretaker_RootNode) {
+            $channels = array_unique(array_merge($channels, $this->getChannelsFromNodes($node->getParent())));
+        }
+
+        return $channels;
+    }
+
+    /**
+     * @param CaretakerMessage $message
+     * @return void
+     */
+    private function sendNotification(CaretakerMessage $message)
+    {
+        $mattermost = new Mattermost(new Client());
+        $mattermost->send($message, $this->config['endpoint']);
     }
 }

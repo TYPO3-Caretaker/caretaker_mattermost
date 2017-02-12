@@ -59,42 +59,75 @@ class CaretakerMessage extends Message
     /**
      * @var string
      */
-    private $textTemplate = '
+    private $markdownTextTemplate = '
+**Test: %s**
+State before: %s
+Test result:
+%s';
+
+    /**
+     * @var string
+     */
+    private $plainTextTemplate = '
 Test: %s
 State before: %s
 Test result:
 %s';
 
     /**
-     * @param \tx_caretaker_TestNode $node
-     * @param \tx_caretaker_TestResult $result
+     * @param array $notifications
      * @param string $channel
      * @param string $username
      * @param string $icon
      */
-    public function __construct(\tx_caretaker_TestNode $node, \tx_caretaker_TestResult $result, $channel, $username = '', $icon = '')
+    public function __construct(array $notifications, $channel, $username = '', $icon = '')
     {
         $this->channel = $channel;
         $this->username = !empty($username) ? $username : $this->defaultUsername;
         $this->iconUrl = !empty($icon) ? $icon : $this->defaultIcon;
 
-        $title = sprintf($this->titleTemplate,
-            $result->getStateInfo(),
-            $node->getInstance()->getTitle(),
-            $node->getInstance()->getCaretakerNodeId()
-        );
-        $prevResult = $node->getPreviousDifferingResult($result);
-        $text = sprintf($this->textTemplate,
-            $node->getTitle(),
-            strtolower($prevResult->getStateInfo()),
-            $result->getMessage()->getText()
-        );
+        $color = '';
+        $title = '';
+        $plainText = [];
+        $markdownText = [];
+
+        foreach ($notifications as $notification) {
+            /** @var \tx_caretaker_TestNode $node */
+            $node = $notification['node'];
+            /** @var \tx_caretaker_TestResult $result */
+            $result = $notification['result'];
+            /** @var \tx_caretaker_TestResult $prevResult */
+            $prevResult = $node->getPreviousDifferingResult($result);
+
+            if (empty($title)) {
+                $color = $this->colors[$result->getState()];
+                $title = sprintf($this->titleTemplate,
+                    $result->getStateInfo(),
+                    $node->getInstance()->getTitle(),
+                    $node->getInstance()->getCaretakerNodeId()
+                );
+            }
+
+            $plainText[] = sprintf($this->plainTextTemplate,
+                $node->getTitle(),
+                strtolower($prevResult->getStateInfo()),
+                $result->getLocallizedInfotext()
+            );
+            $markdownText[] = sprintf($this->markdownTextTemplate,
+                $node->getTitle(),
+                strtolower($prevResult->getStateInfo()),
+                $result->getLocallizedInfotext()
+            );
+        }
+
+        $plainText = implode("\n\n", $plainText);
+        $markdownText = implode("\n***\n", $markdownText);
 
         $attachment = new Attachment();
-        $attachment->fallback($title . "\n" . $text)
+        $attachment->fallback($title . "\n" . $plainText)
             ->title($title)
-            ->text($text)
-            ->color($this->colors[$result->getState()]);
+            ->text($markdownText)
+            ->color($color);
 
         $this->attachments = [$attachment];
     }

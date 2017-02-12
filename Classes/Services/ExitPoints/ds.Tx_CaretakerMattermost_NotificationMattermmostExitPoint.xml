@@ -9,6 +9,14 @@
         </TCEforms>
         <type>array</type>
         <el>
+            <aggregateNotifications>
+                <TCEforms>
+                    <label>Aggregate notifications by instance and state</label>
+                    <config>
+                        <type>check</type>
+                    </config>
+                </TCEforms>
+            </aggregateNotifications>
             <endpoint>
                 <TCEforms>
                     <label>Mattermost Incoming Webhook URL</label>

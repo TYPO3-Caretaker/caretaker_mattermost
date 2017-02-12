@@ -33,6 +33,11 @@ include_once 'phar://' . __DIR__ . '/../../../Resources/Php/thibaud-dauce-matter
 class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretaker_NotificationBaseExitPoint
 {
     /**
+     * @var array
+     */
+    private $aggregatedNotifications = [];
+
+    /**
      * @param array $notification
      * @param array $overrideConfig
      * @return void
@@ -54,7 +59,44 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
         }
 
         foreach ($channels as $channel) {
-            $this->sendNotification(new CaretakerMessage($node, $notification['result'], $channel, $this->config['username'], $this->config['icon']));
+            if (empty($this->config['aggregateNotifications'])) {
+                $this->sendNotification(new CaretakerMessage([$notification], $channel, $this->config['username'], $this->config['icon']));
+            } else {
+                $instanceId = $node->getInstance()->getCaretakerNodeId();
+                $resultState = $notification['result']->getState();
+
+                if (empty($this->aggregatedNotifications[$channel][$instanceId][$resultState])) {
+                    $this->aggregatedNotifications = array_replace_recursive(
+                        $this->aggregatedNotifications,
+                        [
+                            $channel => [
+                                $instanceId => [
+                                    $resultState => [],
+                                ],
+                            ],
+                        ]
+                    );
+                }
+                $this->aggregatedNotifications[$channel][$instanceId][$resultState][] = $notification;
+            }
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function execute()
+    {
+        if (!empty($this->aggregatedNotifications)) {
+            foreach ($this->aggregatedNotifications as $channel => $instanceNotifications) {
+                ksort($instanceNotifications);
+                foreach ($instanceNotifications as $instanceId => $aggregatedNotifications) {
+                    ksort($aggregatedNotifications);
+                    foreach ($aggregatedNotifications as $resultState => $notifications) {
+                        $this->sendNotification(new CaretakerMessage($notifications, $channel, $this->config['username'], $this->config['icon']));
+                    }
+                }
+            }
         }
     }
 

@@ -25,6 +25,14 @@
                     </config>
                 </TCEforms>
             </channel>
+            <username>
+                <TCEforms>
+                    <label>Username</label>
+                    <config>
+                        <type>input</type>
+                    </config>
+                </TCEforms>
+            </username>
             <icon>
                 <TCEforms>
                     <label>Icon</label>

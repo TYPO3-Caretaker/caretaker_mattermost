@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+    <meta>
+        <langDisable>1</langDisable>
+    </meta>
+    <ROOT>
+        <TCEforms>
+            <sheetTitle>Request</sheetTitle>
+        </TCEforms>
+        <type>array</type>
+        <el>
+            <endpoint>
+                <TCEforms>
+                    <label>Mattermost Incoming Webhook URL</label>
+                    <config>
+                        <type>input</type>
+                    </config>
+                </TCEforms>
+            </endpoint>
+            <channel>
+                <TCEforms>
+                    <label>Default channel</label>
+                    <config>
+                        <type>input</type>
+                    </config>
+                </TCEforms>
+            </channel>
+            <icon>
+                <TCEforms>
+                    <label>Icon</label>
+                    <config>
+                        <type>input</type>
+                    </config>
+                </TCEforms>
+            </icon>
+        </el>
+    </ROOT>
+</T3DataStructure>

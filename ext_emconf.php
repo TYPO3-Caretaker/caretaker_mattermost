@@ -37,6 +37,11 @@ $EM_CONF[$_EXTKEY] = array (
     array (
     ),
   ),
+  'autoload' => array(
+      'classmap' => array(
+          'Classes/',
+      ),
+  ),
   '_md5_values_when_last_written' => 'a:1:{s:12:"ext_icon.png";s:4:"98a7";}',
 );
 

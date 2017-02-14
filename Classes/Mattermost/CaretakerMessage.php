@@ -54,7 +54,7 @@ class CaretakerMessage extends Message
     /**
      * @var string
      */
-    private $titleTemplate = '%s in instance: "%s" [%s]';
+    private $titleTemplate = '%s %s in instance: "%s" [%s]';
 
     /**
      * @var string
@@ -102,6 +102,7 @@ Test result:
             if (empty($title)) {
                 $color = $this->colors[$result->getState()];
                 $title = sprintf($this->titleTemplate,
+                    count($notifications),
                     $result->getStateInfo(),
                     $node->getInstance()->getTitle(),
                     $node->getInstance()->getCaretakerNodeId()

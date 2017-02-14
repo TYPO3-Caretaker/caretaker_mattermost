@@ -59,12 +59,11 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
         }
 
         foreach ($channels as $channel) {
-            if (empty($this->config['aggregateNotifications'])) {
-                $this->sendNotification(new CaretakerMessage([$notification], $channel, $this->config['username'], $this->config['icon']));
-            } else {
-                $instanceId = $node->getInstance()->getCaretakerNodeId();
-                $resultState = $notification['result']->getState();
+            $nodeId = $node->getCaretakerNodeId();
+            $instanceId = $node->getInstance()->getCaretakerNodeId();
+            $resultState = $notification['result']->getState();
 
+            if (!isset($this->aggregatedNotifications[$channel][$instanceId][$resultState][$nodeId])) {
                 if (empty($this->aggregatedNotifications[$channel][$instanceId][$resultState])) {
                     $this->aggregatedNotifications = array_replace_recursive(
                         $this->aggregatedNotifications,
@@ -77,7 +76,12 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
                         ]
                     );
                 }
-                $this->aggregatedNotifications[$channel][$instanceId][$resultState][] = $notification;
+                if (empty($this->config['aggregateNotifications'])) {
+                    $this->sendNotification(new CaretakerMessage([$notification], $channel, $this->config['username'], $this->config['icon']));
+                    $this->aggregatedNotifications[$channel][$instanceId][$resultState][$nodeId] = true;
+                } else {
+                    $this->aggregatedNotifications[$channel][$instanceId][$resultState][$nodeId] = $notification;
+                }
             }
         }
     }

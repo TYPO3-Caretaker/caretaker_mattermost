@@ -24,8 +24,12 @@
  ***************************************************************/
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use IchHabRecht\CaretakerMattermost\Mattermost\CaretakerMessage;
+use Psr\Log\LoggerInterface;
 use ThibaudDauce\Mattermost\Mattermost;
+use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 include_once 'phar://' . __DIR__ . '/../../../Resources/Php/thibaud-dauce-mattermost-php.phar/vendor/autoload.php';
@@ -36,6 +40,24 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
      * @var array
      */
     private $aggregatedNotifications = [];
+
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
+     * @param LoggerInterface|null $logger
+     */
+    public function __construct(LoggerInterface $logger = null)
+    {
+        if (null !== $logger) {
+            $this->logger = $logger;
+        } else {
+            $logManager = GeneralUtility::makeInstance(LogManager::class);
+            $this->logger = $logManager->getLogger(get_class($this));
+        }
+    }
 
     /**
      * @param array $notification
@@ -130,6 +152,16 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
     private function sendNotification(CaretakerMessage $message)
     {
         $mattermost = new Mattermost(new Client());
-        $mattermost->send($message, $this->config['endpoint']);
+        try {
+            $mattermost->send($message, $this->config['endpoint']);
+        } catch (RequestException $exception) {
+            $this->logger->error(
+                $exception->getMessage(),
+                [
+                    'config' => $this->config,
+                    'message' => $message,
+                ]
+            );
+        }
     }
 }

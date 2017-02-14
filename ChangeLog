@@ -1,3 +1,9 @@
+2017-02-14         [RELEASE] Release of caretaker_mattermost 1.1.0 (Nicole Cordes)
+2017-02-14 b66e995 [TASK] Include notifications count in title (Nicole Cordes)
+2017-02-14 98bdb1c [FEATURE] Use logging framework to catch exceptions (Nicole Cordes)
+2017-02-14 2f5d57e [BUGFIX] Prevent multiple notifications for same result (Nicole Cordes)
+2017-02-14 9b7f835 [TASK] Remove superfluous variables (Nicole Cordes)
+
 2017-02-12         [RELEASE] Release of caretaker_mattermost 1.0.0 (Nicole Cordes)
 2017-02-12 b755b60 [FEATURE] Add notification aggregation by instance and result state (Nicole Cordes)
 

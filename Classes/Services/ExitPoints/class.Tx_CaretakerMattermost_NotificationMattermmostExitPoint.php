@@ -90,9 +90,9 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
         if (!empty($this->aggregatedNotifications)) {
             foreach ($this->aggregatedNotifications as $channel => $instanceNotifications) {
                 ksort($instanceNotifications);
-                foreach ($instanceNotifications as $instanceId => $aggregatedNotifications) {
+                foreach ($instanceNotifications as $aggregatedNotifications) {
                     ksort($aggregatedNotifications);
-                    foreach ($aggregatedNotifications as $resultState => $notifications) {
+                    foreach ($aggregatedNotifications as $notifications) {
                         $this->sendNotification(new CaretakerMessage($notifications, $channel, $this->config['username'], $this->config['icon']));
                     }
                 }

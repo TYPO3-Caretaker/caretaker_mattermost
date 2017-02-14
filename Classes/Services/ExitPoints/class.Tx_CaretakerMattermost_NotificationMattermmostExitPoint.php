@@ -24,8 +24,12 @@
  ***************************************************************/
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use IchHabRecht\CaretakerMattermost\Mattermost\CaretakerMessage;
+use Psr\Log\LoggerInterface;
 use ThibaudDauce\Mattermost\Mattermost;
+use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 include_once 'phar://' . __DIR__ . '/../../../Resources/Php/thibaud-dauce-mattermost-php.phar/vendor/autoload.php';
@@ -36,6 +40,24 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
      * @var array
      */
     private $aggregatedNotifications = [];
+
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
+     * @param LoggerInterface|null $logger
+     */
+    public function __construct(LoggerInterface $logger = null)
+    {
+        if (null !== $logger) {
+            $this->logger = $logger;
+        } else {
+            $logManager = GeneralUtility::makeInstance(LogManager::class);
+            $this->logger = $logManager->getLogger(get_class($this));
+        }
+    }
 
     /**
      * @param array $notification
@@ -59,12 +81,11 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
         }
 
         foreach ($channels as $channel) {
-            if (empty($this->config['aggregateNotifications'])) {
-                $this->sendNotification(new CaretakerMessage([$notification], $channel, $this->config['username'], $this->config['icon']));
-            } else {
-                $instanceId = $node->getInstance()->getCaretakerNodeId();
-                $resultState = $notification['result']->getState();
+            $nodeId = $node->getCaretakerNodeId();
+            $instanceId = $node->getInstance()->getCaretakerNodeId();
+            $resultState = $notification['result']->getState();
 
+            if (!isset($this->aggregatedNotifications[$channel][$instanceId][$resultState][$nodeId])) {
                 if (empty($this->aggregatedNotifications[$channel][$instanceId][$resultState])) {
                     $this->aggregatedNotifications = array_replace_recursive(
                         $this->aggregatedNotifications,
@@ -77,7 +98,12 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
                         ]
                     );
                 }
-                $this->aggregatedNotifications[$channel][$instanceId][$resultState][] = $notification;
+                if (empty($this->config['aggregateNotifications'])) {
+                    $this->sendNotification(new CaretakerMessage([$notification], $channel, $this->config['username'], $this->config['icon']));
+                    $this->aggregatedNotifications[$channel][$instanceId][$resultState][$nodeId] = true;
+                } else {
+                    $this->aggregatedNotifications[$channel][$instanceId][$resultState][$nodeId] = $notification;
+                }
             }
         }
     }
@@ -90,9 +116,9 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
         if (!empty($this->aggregatedNotifications)) {
             foreach ($this->aggregatedNotifications as $channel => $instanceNotifications) {
                 ksort($instanceNotifications);
-                foreach ($instanceNotifications as $instanceId => $aggregatedNotifications) {
+                foreach ($instanceNotifications as $aggregatedNotifications) {
                     ksort($aggregatedNotifications);
-                    foreach ($aggregatedNotifications as $resultState => $notifications) {
+                    foreach ($aggregatedNotifications as $notifications) {
                         $this->sendNotification(new CaretakerMessage($notifications, $channel, $this->config['username'], $this->config['icon']));
                     }
                 }
@@ -126,6 +152,16 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
     private function sendNotification(CaretakerMessage $message)
     {
         $mattermost = new Mattermost(new Client());
-        $mattermost->send($message, $this->config['endpoint']);
+        try {
+            $mattermost->send($message, $this->config['endpoint']);
+        } catch (RequestException $exception) {
+            $this->logger->error(
+                $exception->getMessage(),
+                [
+                    'config' => $this->config,
+                    'message' => $message,
+                ]
+            );
+        }
     }
 }

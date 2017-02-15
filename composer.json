@@ -21,10 +21,11 @@
     ],
     "require": {
         "typo3/cms-core": "^6.2|^7.6",
-        "caretaker/caretaker": "^0.3"
+        "caretaker/caretaker": ">=0.3.0 <0.8"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.0"
+        "friendsofphp/php-cs-fixer": "^2.0",
+        "phpunit/phpunit": "^4.8"
     },
     "autoload": {
         "psr-4": {
@@ -33,5 +34,24 @@
         "classmap": [
             "Classes/Services/ExitPoints/"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IchHabRecht\\CaretakerMattermost\\Tests\\": "Tests/",
+            "TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/"
+        }
+    },
+    "config": {
+        "preferred-install": {
+            "typo3/cms": "source"
+        },
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin"
+    },
+    "extra": {
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "web-dir": ".Build/Web"
+        }
     }
 }

@@ -149,7 +149,7 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
      * @param CaretakerMessage $message
      * @return void
      */
-    private function sendNotification(CaretakerMessage $message)
+    protected function sendNotification(CaretakerMessage $message)
     {
         $mattermost = new Mattermost(new Client());
         try {

@@ -24,7 +24,7 @@ namespace IchHabRecht\CaretakerMattermost\Tests\Functional\Services\ExitPoints;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Tests\FunctionalTestCase;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 
 class NotificationMattermmostExitPointTest extends FunctionalTestCase
 {

@@ -1,3 +1,13 @@
+2017-03-02         [RELEASE] Release of caretaker_mattermost 1.2.0 (Nicole Cordes)
+2017-03-02 534900c [TASK] Add documentation for channel handling (Nicole Cordes)
+2017-03-02 bbb6836 [FEATURE] Add possibility to mute channels (Nicole Cordes)
+2017-02-23 af976c1 [TASK] Raise nimut/testing-framework dependency to 1.0 (Nicole Cordes)
+2017-02-17 314508a [TASK] Use test class from nimut/testing-framework (Nicole Cordes)
+2017-02-16 0c4c987 [TASK] Use nimut/testing-framework for PHPUnit tests (Nicole Cordes)
+2017-02-15 9f4f368 [TASK] Add functional tests to Travis CI configuration (Nicole Cordes)
+2017-02-15 cf8dc0f [BUGFIX] Fix execute() function (Nicole Cordes)
+2017-02-15 32718da [TASK] Add functional test to ensure notifications are not sent twice (Nicole Cordes)
+
 2017-02-14         [RELEASE] Release of caretaker_mattermost 1.1.0 (Nicole Cordes)
 2017-02-14 b66e995 [TASK] Include notifications count in title (Nicole Cordes)
 2017-02-14 98bdb1c [FEATURE] Use logging framework to catch exceptions (Nicole Cordes)

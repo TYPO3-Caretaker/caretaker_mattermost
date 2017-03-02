@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "caretaker_mattermost".
  *
- * Auto generated 14-02-2017 23:09
+ * Auto generated 02-03-2017 22:20
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next
@@ -18,7 +18,7 @@ $EM_CONF[$_EXTKEY] = array (
   'author_email' => 'typo3@cordes.co',
   'author_company' => 'CPS-IT GmbH',
   'state' => 'stable',
-  'version' => '1.1.0',
+  'version' => '1.2.0',
   'uploadfolder' => 0,
   'createDirs' => '',
   'clearCacheOnLoad' => 0,
@@ -44,6 +44,6 @@ $EM_CONF[$_EXTKEY] = array (
       0 => 'Classes/',
     ),
   ),
-  '_md5_values_when_last_written' => 'a:13:{s:9:"ChangeLog";s:4:"68da";s:9:"README.md";s:4:"b042";s:13:"composer.json";s:4:"a120";s:16:"ext_autoload.php";s:4:"ec50";s:12:"ext_icon.png";s:4:"98a7";s:17:"ext_localconf.php";s:4:"ed94";s:14:"ext_tables.sql";s:4:"491d";s:39:"Classes/Mattermost/CaretakerMessage.php";s:4:"4ee3";s:93:"Classes/Services/ExitPoints/class.Tx_CaretakerMattermost_NotificationMattermmostExitPoint.php";s:4:"7571";s:90:"Classes/Services/ExitPoints/ds.Tx_CaretakerMattermost_NotificationMattermmostExitPoint.xml";s:4:"b6b5";s:44:"Configuration/TCA/Overrides/tx_caretaker.php";s:4:"1c28";s:47:"Resources/Php/thibaud-dauce-mattermost-php.phar";s:4:"d626";s:43:"Resources/Private/Language/locallang_db.xlf";s:4:"9504";}',
+  '_md5_values_when_last_written' => 'a:14:{s:9:"ChangeLog";s:4:"b59a";s:9:"README.md";s:4:"4f8a";s:13:"composer.json";s:4:"0ee3";s:16:"ext_autoload.php";s:4:"ec50";s:12:"ext_icon.png";s:4:"98a7";s:17:"ext_localconf.php";s:4:"ed94";s:14:"ext_tables.sql";s:4:"491d";s:39:"Classes/Mattermost/CaretakerMessage.php";s:4:"4ee3";s:93:"Classes/Services/ExitPoints/class.Tx_CaretakerMattermost_NotificationMattermmostExitPoint.php";s:4:"bb9f";s:90:"Classes/Services/ExitPoints/ds.Tx_CaretakerMattermost_NotificationMattermmostExitPoint.xml";s:4:"b6b5";s:44:"Configuration/TCA/Overrides/tx_caretaker.php";s:4:"1c28";s:47:"Resources/Php/thibaud-dauce-mattermost-php.phar";s:4:"d626";s:43:"Resources/Private/Language/locallang_db.xlf";s:4:"9504";s:77:"Tests/Functional/Services/ExitPoints/NotificationMattermmostExitPointTest.php";s:4:"c6b6";}',
 );
 

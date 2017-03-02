@@ -77,6 +77,34 @@ class NotificationMattermmostExitPointTest extends FunctionalTestCase
     }
 
     /**
+     * @test
+     */
+    public function preventMessagesToMutedChannels()
+    {
+        /** @var \Tx_CaretakerMattermost_NotificationMattermmostExitPoint|\PHPUnit_Framework_MockObject_MockObject $subject */
+        $subject = $this->getMock(\Tx_CaretakerMattermost_NotificationMattermmostExitPoint::class, ['sendNotification']);
+        $subject->expects($this->once())->method('sendNotification');
+
+        $configuration = [
+            'endpoint' => 'foo.bar',
+            'channel' => 'mattermost',
+            'aggregateNotifications' => true,
+        ];
+
+        $notification = $this->getNotification();
+        $testNode = $notification['node'];
+        $instanceNode = $testNode->getParent();
+        $instanceNode->setDbRow(
+            [
+                'tx_caretakermattermost_channel' => 'node, -mattermost',
+            ]
+        );
+
+        $subject->addNotification($notification, $configuration);
+        $subject->execute();
+    }
+
+    /**
      * @return array
      */
     private function getNotification()

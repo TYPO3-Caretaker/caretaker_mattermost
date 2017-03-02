@@ -76,6 +76,22 @@ class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretak
 
         $channels = GeneralUtility::trimExplode(',', $config['channel'], true);
         $channels = array_unique(array_merge($channels, $this->getChannelsFromNodes($node)));
+        // Remove muted channels
+        $mutedChannels = array_filter(
+            $channels,
+            function ($value) {
+                return strpos($value, '-') === 0;
+            }
+        );
+        if (!empty($mutedChannels)) {
+            $mutedChannels = array_merge($mutedChannels, array_map(
+                function ($value) {
+                    return substr($value, 1);
+                },
+                $mutedChannels
+            ));
+            $channels = array_diff($channels, $mutedChannels);
+        }
         if (empty($channels)) {
             return;
         }

@@ -24,7 +24,7 @@
         "thibaud-dauce/mattermost-php": "^1.0"
     },
     "require-dev": {
-        "nimut/testing-framework": "1.x-dev",
+        "nimut/testing-framework": "2.x-dev",
         "phpunit/phpunit": "^4.8"
     },
     "suggest": {

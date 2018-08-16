@@ -1,0 +1,11 @@
+{
+    "config": {
+        "platform": {
+            "php": "5.5.0"
+        },
+        "classmap-authoritative": true
+    },
+    "require": {
+        "thibaud-dauce/mattermost-php": "^1.0"
+    }
+}

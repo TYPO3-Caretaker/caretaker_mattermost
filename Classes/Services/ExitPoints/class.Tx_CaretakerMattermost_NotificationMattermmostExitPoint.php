@@ -32,8 +32,6 @@ use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-include_once 'phar://' . __DIR__ . '/../../../Resources/Php/thibaud-dauce-mattermost-php.phar/vendor/autoload.php';
-
 class Tx_CaretakerMattermost_NotificationMattermmostExitPoint extends tx_caretaker_NotificationBaseExitPoint
 {
     /**

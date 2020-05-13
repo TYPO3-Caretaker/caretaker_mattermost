@@ -1,3 +1,11 @@
+2020-05-13         [RELEASE] Release of caretaker_mattermost 2.0.0 (Jan Haffner)
+2020-05-13 a183595 [TASK] Add ter deployment (Jan Haffner)
+2020-05-12 af25c29 [TASK] Add support for TYPO3 v8 (Jan Haffner)
+2020-05-12 7bcb46b [TASK] Update dependencies (Jan Haffner)
+2020-05-12 831feb0 [TASK] Drop support for TYPO3 v6 (Jan Haffner)
+2020-05-12 bf1d7dd [TASK] Change extension icon (Jan Haffner)
+2020-05-12 720a75f [TASK] Extend extension author (Jan Haffner)
+
 2018-08-16         [RELEASE] Release of caretaker_mattermost 1.2.1 (Nicole Cordes)
 2018-08-16 a970892 [TASK] Raise nimut/testing-framework dependency to 2.x-dev (Nicole Cordes)
 2018-08-16 59089ee [BUGFIX] Remove phar file in favour of composer installation (Nicole Cordes)

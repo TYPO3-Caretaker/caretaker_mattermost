@@ -66,7 +66,8 @@ class NotificationMattermmostExitPointTest extends FunctionalTestCase
     public function preventMultipleMessagesForSameNotification(array $configuration)
     {
         /** @var \Tx_CaretakerMattermost_NotificationMattermmostExitPoint|\PHPUnit_Framework_MockObject_MockObject $subject */
-        $subject = $this->getMock(\Tx_CaretakerMattermost_NotificationMattermmostExitPoint::class, ['sendNotification']);
+        $subject = $this->getMockBuilder(\Tx_CaretakerMattermost_NotificationMattermmostExitPoint::class)
+            ->setMethods(['sendNotification'])->getMock();
         $subject->expects($this->once())->method('sendNotification');
 
         $notification = $this->getNotification();
@@ -82,7 +83,8 @@ class NotificationMattermmostExitPointTest extends FunctionalTestCase
     public function preventMessagesToMutedChannels()
     {
         /** @var \Tx_CaretakerMattermost_NotificationMattermmostExitPoint|\PHPUnit_Framework_MockObject_MockObject $subject */
-        $subject = $this->getMock(\Tx_CaretakerMattermost_NotificationMattermmostExitPoint::class, ['sendNotification']);
+        $subject = $this->getMockBuilder(\Tx_CaretakerMattermost_NotificationMattermmostExitPoint::class)
+            ->setMethods(['sendNotification'])->getMock();
         $subject->expects($this->once())->method('sendNotification');
 
         $configuration = [

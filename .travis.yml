@@ -5,26 +5,42 @@ language: php
 matrix:
   fast_finish: true
   include:
+    - php: 7.4
+      env: TYPO3=^8.7
+    - php: 7.3
+      env: TYPO3=^8.7
+    - php: 7.2
+      env: TYPO3=^8.7
     - php: 7.1
-      env: TYPO3="dev-TYPO3_7-6 as 7.6.99"
+      env: TYPO3=^8.7
+    - php: 7.0
+      env: TYPO3=^8.7
+    - php: 7.2
+      env: TYPO3=^7.6
     - php: 7.1
       env: TYPO3=^7.6
     - php: 7.0
-      env: TYPO3="dev-TYPO3_7-6 as 7.6.99"
-    - php: 7.0
       env: TYPO3=^7.6
     - php: 5.6
-      env: TYPO3="dev-TYPO3_7-6 as 7.6.99"
-    - php: 5.6
-      env: TYPO3=^7.6
-    - php: 5.6
-      env: TYPO3=^6.2
-    - php: 5.5
-      env: TYPO3="dev-TYPO3_7-6 as 7.6.99"
-    - php: 5.5
       env: TYPO3=^7.6
     - php: 5.5
-      env: TYPO3=^6.2
+      env: TYPO3=^7.6
+    - stage: Deploy to TER
+      if: tag IS present
+      php: 7.0
+      install: skip
+      before_script: skip
+      script:
+       - |
+         if [ -n "$TYPO3_ORG_USERNAME" ] && [ -n "$TYPO3_ORG_PASSWORD" ]; then
+           echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n";
+           # Install ter client
+           composer global require helhum/ter-client
+           # Upload
+           TAG_MESSAGE=`git tag -n10 -l $TRAVIS_TAG | sed 's/^[0-9.]*[ ]*//g'`
+           echo "Uploading release ${TRAVIS_TAG} to TER"
+           $HOME/.composer/vendor/bin/ter-client upload caretaker_mattermost . -u "$TYPO3_ORG_USERNAME" -p "$TYPO3_ORG_PASSWORD" -m "$TAG_MESSAGE"
+         fi;
 
 addons:
   apt:

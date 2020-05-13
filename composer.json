@@ -12,20 +12,19 @@
     "license": "GPL-2.0-or-later",
     "authors": [
         {
-            "name": "Nicole Cordes | CPS-IT GmbH",
+            "name": "Nicole Cordes, Jan Haffner | CPS-IT GmbH",
             "email": "typo3@cordes.co",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^5.5 || >=7.0 <7.2",
-        "typo3/cms-core": "^6.2|^7.6",
-        "caretaker/caretaker": ">=0.3.0 <0.9",
+        "typo3/cms-core": "^7.6 || ^8.7",
+        "caretaker/caretaker": ">=1.0.0 <1.99.99",
         "thibaud-dauce/mattermost-php": "^1.0"
     },
     "require-dev": {
-        "nimut/testing-framework": "2.x-dev",
-        "phpunit/phpunit": "^4.8"
+        "nimut/testing-framework": "^2.0 || ^4.0",
+        "phpunit/phpunit": "^4.8 || ^6.5"
     },
     "suggest": {
         "friendsofphp/php-cs-fixer": "Tool to automatically fix PHP coding standards issues"
